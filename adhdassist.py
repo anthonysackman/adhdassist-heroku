@@ -1,15 +1,16 @@
-from flask import Flask, request, jsonify 
+from flask import Flask, request, jsonify , render_template
 import json
 
 
 app = Flask(__name__)
 
 @app.route('/')
-def index():
-    return json.dumps({'foo': 'bar',
-                       'baz': 'damn'})
+@app.route('/<user>')
+def index(user=None):
+    user_set = user or 'Stranger'
+    return render_template('index.html', user=user_set)
     
-@app.route('/test', methods=['POST'])
+@app.route('/api/', methods=['POST'])
 def post():
     value = json.loads(request.data)
     return json.dumps(value)
