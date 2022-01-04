@@ -5,3 +5,4 @@ load_dotenv()
 
 # Placeholder for enviromental variable setup
 # SQL_URL = os.getenv('SQL_DB_URL')\
+DATABASE_URL = os.getenv('DATABASE_URL')
