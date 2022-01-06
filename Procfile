@@ -1,2 +1,2 @@
-web: gunicorn adhdassist:app
+web: gunicorn wsgi:app
 

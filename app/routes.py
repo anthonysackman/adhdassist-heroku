@@ -1,8 +1,7 @@
-from flask import Flask, request, jsonify , render_template
+from flask import request, render_template
 import json
+from app import app
 
-
-app = Flask(__name__)
 
 @app.route('/')
 @app.route('/<user>')
@@ -14,6 +13,3 @@ def index(user=None):
 def post():
     value = json.loads(request.data)
     return json.dumps(value)
-
-if __name__ == '__main__': 
-    app.run()
