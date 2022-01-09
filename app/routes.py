@@ -5,9 +5,8 @@ from app import app
 
 @app.route('/')
 @app.route('/<user>')
-def index(user=None):
-    user_set = user or 'Stranger'
-    return render_template('index.html', user=user_set)
+def index(user="stranger"):
+    return render_template('index.html', user_val=user)
     
 @app.route('/api/', methods=['POST'])
 def post():
