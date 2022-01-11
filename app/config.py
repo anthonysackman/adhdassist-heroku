@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from app.base_log import _logger
-#from app.base_log import _log
+
 # environmental variable configuration file
 class Config(object):
     def __init__(self) -> None:
