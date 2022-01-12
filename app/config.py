@@ -21,7 +21,7 @@ class Config(object):
     
     def prod_config(self):
         try:    
-            self.SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABAsE_URI']
+            self.SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
         except Exception as er:
            self. _log.error("config failed, exiting...", extra={'error':er})
            exit()
