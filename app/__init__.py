@@ -4,6 +4,13 @@ from flask_migrate import Migrate
 from app.base_log import _logger
 from app.config import Config
 
+def test_app():
+    _app = Flask(__name__)
+    _db = SQLAlchemy(app)
+    _migrate = Migrate(app, db)
+    from app import routes, models
+    
+
 # flask app init
 app = Flask(__name__)
 # load/set logging_config.yml for logging

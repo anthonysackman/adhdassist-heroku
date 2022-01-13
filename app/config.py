@@ -23,8 +23,7 @@ class Config(object):
         try:    
             self.SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
         except Exception as er:
-           self. _log.error("config failed, exiting...", extra={'error':er})
-           exit()
+           self. _log.error("config failed", extra={'error':er})
             
     def local_config(self):
         load_dotenv() # only needed to load .env locally
