@@ -4,7 +4,6 @@ from flask_migrate import Migrate
 from app.base_log import _logger
 from app.config import Config
 
-print("test")
 # flask app init
 app = Flask(__name__)
 # load/set logging_config.yml for logging
