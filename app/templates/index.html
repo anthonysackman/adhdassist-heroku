@@ -1,9 +1,15 @@
-<html>
-  <head>
-    <title>ADHD Assist</title>
-  </head>
-  <body>
-    <h1>Hello {{ user_val }}!</h1>
-    <p>Welcome to ADHD Assist!</p>
-  </body>
-</html>
+{% extends 'base.html' %}
+{% set bot_navigation_bar = [
+('/', 'home', 'Home'),
+('/login', 'login', 'Login')
+] -%}
+{% set active_page = "home" %}
+
+{% block header %}
+<h1>{% block title %}ADHD Assist{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<h1>Hello {{ user_val }}!</h1>
+<p>Welcome to ADHD Assist!</p>
+{% endblock %}
