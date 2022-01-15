@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% set active_page = active_page -%}
+{% set active_bot_page = active_bot_page %}
+{% block botnav %}
+
+<body>
+    <div class="botnav">
+        {% for href, id, caption in bot_navigation_bar %}
+        <a {% if id==active_bot_page %} class="active" {% endif %} href="{{ href }}">{{ caption|e }}</a>
+        {% endfor %}
+    </div>
+</body>
+{% endblock %}

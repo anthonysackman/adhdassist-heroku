@@ -20,14 +20,16 @@ class Config(object):
         self._log.info("Config set", extra={'env_var':self.ENV_VAR})
     
     def prod_config(self):
-        try:    
+        try:
+            self.SECRET_KEY = os.environ.get('SECRET_KEY')    
             self.SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
         except Exception as er:
            self. _log.error("config failed", extra={'error':er})
             
     def local_config(self):
         load_dotenv() # only needed to load .env locally
-        try:    
+        try:
+            self.SECRET_KEY = os.environ.get('SECRET_KEY')    
             self.SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
         except Exception as er:
            self. _log.error("config failed, exiting...", extra={'error':er})
