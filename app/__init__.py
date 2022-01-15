@@ -13,7 +13,6 @@ login.login_view = 'login'
 # load/set logging_config.yml for logging
 _logger.log_config()
 _log = _logger._log(__name__)
-_log.info("log configured")
 # load enviromental variables, attaches to flasp app object
 _config = Config()
 _config.set_config()

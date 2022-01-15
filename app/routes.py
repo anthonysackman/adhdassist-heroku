@@ -27,14 +27,14 @@ def login():
     if login_form.validate_on_submit():
         # check if user_account record with this email exists and user password_hash matched
         user = user_account.query.filter_by(email=login_form.email.data).first()
-        if user is None or not user.check_password_hash(login_form.password.data):
+        if user is None or not user.check_password(login_form.password.data):
             #flash passes data into next request
             flash('Invalid email or password')
             return redirect(url_for('login'))
         login_user(user, remember=login_form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('/')
+            next_page = url_for('index')
         return redirect(next_page)
     return render_template('login.html', form=login_form)
 
@@ -56,7 +56,7 @@ def register_user():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('/'))
+    return redirect(url_for('index'))
 
 #login_required redirects to /login if auth fails
 @login_required
