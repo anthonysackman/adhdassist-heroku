@@ -3,13 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from app.base_log import _logger
 from app.config import Config
+from flask_login import LoginManager
 
 # flask app init
 app = Flask(__name__)
+# set login/session object, loginview sets default login page for protected endpoints
+login = LoginManager(app)
+login.login_view = 'login'
 # load/set logging_config.yml for logging
 _logger.log_config()
 _log = _logger._log(__name__)
-_log.info("log configured")
 # load enviromental variables, attaches to flasp app object
 _config = Config()
 _config.set_config()
