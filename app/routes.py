@@ -1,3 +1,4 @@
+from xml.dom import NotFoundErr
 from flask import request, render_template, flash, redirect, url_for
 import json
 from app import app, db
@@ -51,6 +52,13 @@ def register_user():
         flash('Registration completed successfully')
         return redirect(url_for('login'))
     return render_template('register.html', form=register_form)
+
+@app.route('/validate-email/<validationHash>', methods=['GET', 'POST'])
+def validate_email(validationHash=None):
+    if validationHash is None:
+        raise NotFoundErr
+    
+    
 
 # end user session
 @app.route('/logout')
