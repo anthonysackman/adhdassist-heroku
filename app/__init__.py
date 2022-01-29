@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from app.base_log import _logger
 from app.config import Config
 from flask_login import LoginManager
+from flask_mail import Mail
 
 # flask app init
 app = Flask(__name__)
@@ -13,6 +14,8 @@ login.login_view = 'login'
 # load/set logging_config.yml for logging
 _logger.log_config()
 _log = _logger._log(__name__)
+# Configure flask_mailer
+mail = Mail(app)
 # load enviromental variables, attaches to flasp app object
 _config = Config()
 _config.set_config()

@@ -1,16 +1,18 @@
-from app import db
+from app import db, mail
 from sqlalchemy.sql import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
 import secrets
+from flask_mail import Message
+
 # UserMixin impliments standard database configurations for user session tracking (used specifically for flask_login package)
 # includes:
 # is_authenticated, is_active, is_anonymous columns
 # includes get_id() method
 class user_account(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(128), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=True)
     is_email_validated = db.Column(db.Boolean, nullable=False, default=False)
     email_auth_codes = db.relationship('user_email_auth', backref='user_account', lazy=True)
@@ -38,6 +40,10 @@ class user_email_auth(db.Model):
     def set_url_hash(self):
         self.url_hash = secrets.token_urlsafe(16)
         # call auth email logic from here, never will set a hash without wanting an email sent
+        send_validation_email = Message("Hello",
+                                        recipients=[self.id])
+        #mail.send(send_validation_email)
+        
     
     def check_hash(self, hash):
         if hash in self.url_hash:

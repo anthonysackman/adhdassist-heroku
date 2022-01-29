@@ -13,7 +13,7 @@ _log = _logger._log(__name__)
 
 #login_required redirects to /login if auth fails
 @login_required
-@app.route('/')
+@app.route('/')        
 @app.route('/<user>')
 def index(user="stranger"):
     _log.debug("INDEX DEBUG", extra={'request':request.__dict__})

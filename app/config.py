@@ -19,7 +19,6 @@ class Config(object):
     
     def prod_config(self):
         try:
-            self.EMAIL_FROM = os.environ.get('EMAIL_FROM')
             self.SECRET_KEY = os.environ.get('SECRET_KEY')    
             self.SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
         except Exception as er:
@@ -28,7 +27,6 @@ class Config(object):
     def local_config(self):
         load_dotenv() # only needed to load .env locally
         try:
-            self.EMAIL_FROM = os.environ.get('EMAIL_FROM')
             self.SECRET_KEY = os.environ.get('SECRET_KEY')    
             self.SQLALCHEMY_DATABASE_URI = os.environ['LOCAL_DB']
         except Exception as er:
