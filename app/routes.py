@@ -1,3 +1,4 @@
+from http.client import FORBIDDEN
 from xml.dom import NotFoundErr
 from flask import request, render_template, flash, redirect, url_for
 import json
@@ -5,11 +6,13 @@ from app import app, db
 from app.base_log import _logger
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import user_account
+from app.models import user_account, user_email_auth
 from werkzeug.urls import url_parse
 
 _log = _logger._log(__name__)
 
+#login_required redirects to /login if auth fails
+@login_required
 @app.route('/')
 @app.route('/<user>')
 def index(user="stranger"):
@@ -34,6 +37,7 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=login_form.remember_me.data)
         next_page = request.args.get('next')
+        # next page checks to see if user was redirected to login and returns them if so
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
@@ -49,15 +53,22 @@ def register_user():
         new_user.set_password(register_form.password.data)
         db.session.add(new_user)
         db.session.commit()
-        flash('Registration completed successfully')
+        new_email_auth = user_email_auth(user_account_id=new_user.id)
+        new_email_auth.set_url_hash()
+        db.session.add(new_email_auth)
+        db.session.commit()
+        flash('Registration Email Sent!')
         return redirect(url_for('login'))
     return render_template('register.html', form=register_form)
 
+@login_required
 @app.route('/validate-email/<validationHash>', methods=['GET', 'POST'])
 def validate_email(validationHash=None):
+    _url_hash = user_email_auth(id=current_user.id)
     if validationHash is None:
         raise NotFoundErr
-    
+    if _url_hash.first().url_hash == validationHash:
+        return "test"
     
 
 # end user session
@@ -66,8 +77,7 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-#login_required redirects to /login if auth fails
-@login_required
+
 @app.route('/api/', methods=['POST'])
 def post():
     _log.debug("POST DEBUG", extra={'request':request.__dict__})

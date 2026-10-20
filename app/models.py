@@ -3,6 +3,7 @@ from sqlalchemy.sql import func
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
+import secrets
 # UserMixin impliments standard database configurations for user session tracking (used specifically for flask_login package)
 # includes:
 # is_authenticated, is_active, is_anonymous columns
@@ -11,7 +12,7 @@ class user_account(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=True)
-    #is_email_validated = db.Column(db.Boolean, nullable=False)
+    is_email_validated = db.Column(db.Boolean, nullable=False, default=False)
     email_auth_codes = db.relationship('user_email_auth', backref='user_account', lazy=True)
     time_created = db.Column(db.TIMESTAMP, server_default=func.now())
     time_updated = db.Column(db.TIMESTAMP, server_default=func.now(), onupdate=func.current_timestamp())
@@ -30,9 +31,19 @@ def load_user(id):
 
 class user_email_auth(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_account_id = db.Column(db.Integer, db.ForeignKey('user_account.id'))
+    user_account_id = db.Column(db.Integer, db.ForeignKey('user_account.id'), nullable=False)
     url_hash = db.Column(db.String(120), nullable=False)
     time_created = db.Column(db.TIMESTAMP, server_default=func.now())
+    
+    def set_url_hash(self):
+        self.url_hash = secrets.token_urlsafe(16)
+        # call auth email logic from here, never will set a hash without wanting an email sent
+    
+    def check_hash(self, hash):
+        if hash in self.url_hash:
+            return True
+        else:
+            return False
 
 # use to pass current user to current page    
 @login.user_loader
